@@ -31,6 +31,16 @@ The Argo-CD part is done in Settings->Repositories->Add Repository Using SSh -> 
 
 Now that we have added our repo, we can add an Argo-CD application. I have illustrated how the argo application is created declaratively in the `.argo-cd` folder. The basic configuration is very easy and merely points to the the git repository where our Kustomize application lives. This Kustomize is just a simple wrapper around our simple deployment to allow for bundling multiple resources (in this case just one) and also doing some simple build time parameterization. Our main reason for using it here is its one of the main types that Argo supports.
 
+You can test that the app is created by running the following (with kubectl installed). This is a one time application creation. Argo-CD will then watch our git repository for changes to the source so that we can keep our application in sync on the cluster!!
+
+```bash
+kubectl apply - f ./.argo-cd/application.yaml -n argo
+```
+
+Browse to the cluster/argo-cd to see that the application is deployed and in sync with our repo.
+
+You can test making a change to the code and pushing it to the main brand and waiting for argo to sync. There are hooks we can add to optimize this when we complete our GitOps flow later.
+
 ### C: git actions to build the app and sync to cluster(s)
 
 # Notes
