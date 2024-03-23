@@ -50,6 +50,12 @@ We add a folder `.github/workflows` and place in an `action.yaml` to watch our a
 
 On your repo you should add secrets for AWS keys. (See the Action for the keys and use secrets manager for the values.)
 
+One thing we can do is tag our container images with `${{ github.sha }}` but semantic version is probably nicer. We also want to run the kustomize to set this tag.
+
+#### Kustomize
+
+#### Semantic versioning
+
 # Notes
 
 TODO (Research platform builds for node) Issue: <https://github.com/npm/cli/issues/4828>

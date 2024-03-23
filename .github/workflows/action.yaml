@@ -1,3 +1,4 @@
+#${{ github.event.release.tag_name }}
 name: BuildOneChat
 on:
   push:
@@ -41,3 +42,17 @@ jobs:
           --env "BP_WEB_SERVER_ENABLE_PUSH_STATE=true" \
           --env "NODE_ENV=production"\
           --cache-image 286292902993.dkr.ecr.us-east-1.amazonaws.com/infra-test:one-chat-${{ github.sha }}  --publish
+      #we can kusttomize the image but this version requires that we push back or commit back to main in the build
+      - name: Install kustomize
+        working-directory: app/manifest
+        run: |
+          curl -s https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh | bash
+      - name: Update k8s image tag
+        working-directory: app/manifest
+        run: |
+          ./kustomize edit set image 286292902993.dkr.ecr.us-east-1.amazonaws.com/infra-test:${{ github.sha }}
+          git config user.name "k8s github action"
+          git config user.email "<>"
+          git add kustomization.yaml
+          git commit -m "CI: update image tag to ${{ github.sha }}"
+          git push
