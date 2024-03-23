@@ -35,6 +35,7 @@ jobs:
       - name: Build and push container image to registry
         run: |
           pack build --buildpack paketo-buildpacks/web-servers \
+          --builder paketobuildpacks/builder-jammy-base \
           --env "BP_WEB_SERVER=nginx" \
           --env "BP_WEB_SERVER_ROOT=dist" \
           --env "BP_WEB_SERVER_ENABLE_PUSH_STATE=true" \
