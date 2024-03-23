@@ -15,9 +15,21 @@ I played around with some other options see `repack.sh`
 
 3. `npm i & npm run dev`
 
+Without worrying about Argo, a simple deployment that you can deploy and test on a K8s cluster is in `/app/manifest/deployment.yaml`. you can use kube-forwarder to open a port to the deployment to test the app.
+
 ### B: Now that we have a basic application we can test the deployments
 
-We will start with an Argo Application that can be deployed into multiple clusters. The application will run the container image generated and placed on ECR above which contains our application. In a later step we will create git actions to build that container so the app can be synced
+We can warp our deployment as an Argo Application that can be deployed into multiple clusters. In a later step we will create git actions to build that container so the app can be synced.
+
+We start by configuring our git-repo to talk to Argo. In this case I am in the one-chat repo and i can connect Argo to it. I added a [deploy key](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/managing-deploy-keys#deploy-keys) by generating a key, pasting the public part into a new deploy key and holding onto the private key for adding the repo in ArgoCD. Note, git asks us to generate keys like this
+
+```bash
+ssh-keygen -t ed25519 -C "techpirates@resonance.nyc"
+```
+
+The Argo-CD part is done in Settings->Repositories->Add Repository Using SSh -> and pasting in the full private key and the git+ssh url for the repository. Here is the [argo dev link](https://argocddev.resmagic.io/settings/repos) as an example where you can add your own repository
+
+Now that we have added our repo, we can add an Argo-CD application. I have illustrated how the argo application is created declaratively in the `.argo-cd` folder. The basic configuration is very easy and merely points to the the git repository where our Kustomize application lives. This Kustomize is just a simple wrapper around our simple deployment to allow for bundling multiple resources (in this case just one) and also doing some simple build time parameterization. Our main reason for using it here is its one of the main types that Argo supports.
 
 ### C: git actions to build the app and sync to cluster(s)
 
