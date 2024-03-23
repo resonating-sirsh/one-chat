@@ -3,5 +3,5 @@ kind: Kustomization
 resources:
   - deployment.yaml
 images:
-  - name: 286292902993.dkr.ecr.us-east-1.amazonaws.com/infra-test:one-chat-latest
+  - name: 286292902993.dkr.ecr.us-east-1.amazonaws.com/infra-test
     newTag: "one-chat-latest"

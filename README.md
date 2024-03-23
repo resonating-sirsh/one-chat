@@ -54,6 +54,8 @@ One thing we can do is tag our container images with `${{ github.sha }}` but sem
 
 #### Kustomize
 
+I added steps in the action to install kustomize and set the image tag. To do this we need to (a little unsatisfying) commit it back to ArgoCD can see something changed in our image namely the container version. I thus allow github actions read-write permissions.
+
 #### Semantic versioning
 
 # Notes
