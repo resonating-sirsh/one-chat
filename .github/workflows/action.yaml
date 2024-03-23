@@ -51,7 +51,7 @@ jobs:
         working-directory: app/manifest
         #note the convention i used here was to use app-name-sha as the tag
         run: |
-          ./kustomize edit set image 286292902993.dkr.ecr.us-east-1.amazonaws.com/infra-test:one-chat${{ github.sha }}
+          ./kustomize edit set image 286292902993.dkr.ecr.us-east-1.amazonaws.com/infra-test:one-chat-${{ github.sha }}
           git config user.name "k8s github action"
           git config user.email "<>"
           git add kustomization.yaml
