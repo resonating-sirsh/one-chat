@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: one-chat
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: one-chat
+  template:
+    metadata:
+      labels:
+        app: one-chat
+    spec:
+      containers:
+        - name: one-chat-container
+          image: 286292902993.dkr.ecr.us-east-1.amazonaws.com/infra-test:one-chat-latest
+
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          resources:
+            limits:
+              cpu: "1"
+              memory: "1Gi"
+            requests:
+              cpu: "1"
+              memory: "500Mi"
+#kc apply -f simple-deployment.yaml -n test
+#kc delete -f simple-deployment.yaml -n test
+#kc get pod -n test -w
+
+#as we have deployed this in test namespace, use kube-forwarder to open a port to these pods on the test namespace on 8080
