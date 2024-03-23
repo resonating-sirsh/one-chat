@@ -1,0 +1,42 @@
+name: BuildOneChat
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - "README.md"
+jobs:
+  build-it:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        # with:
+        #   fetch-depth: 0
+      - name: Git branch name
+        id: git-branch-name
+        uses: EthanSK/git-branch-name-action@v1
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Install pack cli
+        run: |
+          sudo add-apt-repository ppa:cncf-buildpacks/pack-cli -yy
+          sudo apt-get update -yy
+          sudo apt-get install pack-cli -yy
+
+      - name: Build and push container image to registry
+        run: |
+          pack build --buildpack paketo-buildpacks/web-servers \
+          --env "BP_WEB_SERVER=nginx" \
+          --env "BP_WEB_SERVER_ROOT=dist" \
+          --env "BP_WEB_SERVER_ENABLE_PUSH_STATE=true" \
+          --env "NODE_ENV=production"\
+          --cache-image 286292902993.dkr.ecr.us-east-1.amazonaws.com/infra-test:one-chat-${{ github.sha }}  --publish

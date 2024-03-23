@@ -41,11 +41,14 @@ This is added into the default namespace for Argo Application.
 
 Browse to the cluster/argo-cd to see that the application is deployed and in sync with our repo. You can search for `one-chat` in this case.
 
-You can test making a change to the code and pushing it to the main brand and waiting for argo to sync. There are hooks we can add to optimize this when we complete our GitOps flow later.
+You can test making a change e.g. change the number of replicas in the the deployment to the code and pushing it to the main branch and waiting for argo to sync (it does so every three minutes if we don't intervene). There are hooks we can add to optimize this when we complete our GitOps flow later.
 
 ### C: git actions to build the app and sync to cluster(s)
 
 Finally we can create a simple workflow to build the containers with our code when merged into main. To do this we add a git action to build the container and tag it in the manifest.
+We add a folder `.github/workflows` and place in an `action.yaml` to watch our app deployment
+
+On your repo you should add secrets for AWS keys. (See the Action for the keys and use secrets manager for the values.)
 
 # Notes
 
