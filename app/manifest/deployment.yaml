@@ -4,7 +4,7 @@ metadata:
   name: one-chat
   namespace: test
 spec:
-  replicas: 3
+  replicas: 2
   selector:
     matchLabels:
       app: one-chat
