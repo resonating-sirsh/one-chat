@@ -34,14 +34,18 @@ Now that we have added our repo, we can add an Argo-CD application. I have illus
 You can test that the app is created by running the following (with kubectl installed). This is a one time application creation. Argo-CD will then watch our git repository for changes to the source so that we can keep our application in sync on the cluster!!
 
 ```bash
-kubectl apply - f ./.argo-cd/application.yaml -n argo
+kubectl apply - f ./.argo-cd/application.yaml 
 ```
 
-Browse to the cluster/argo-cd to see that the application is deployed and in sync with our repo.
+This is added into the default namespace for Argo Application.
+
+Browse to the cluster/argo-cd to see that the application is deployed and in sync with our repo. You can search for `one-chat` in this case.
 
 You can test making a change to the code and pushing it to the main brand and waiting for argo to sync. There are hooks we can add to optimize this when we complete our GitOps flow later.
 
 ### C: git actions to build the app and sync to cluster(s)
+
+Finally we can create a simple workflow to build the containers with our code when merged into main. To do this we add a git action to build the container and tag it in the manifest.
 
 # Notes
 
